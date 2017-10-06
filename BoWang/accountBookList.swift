@@ -63,6 +63,7 @@ class accountBookList: UITableViewController, ToDoItemDelegate3 {
                         self.bookIdList.add("\(item["bookId"]!)")
                         
                     }
+                    self.tableView.reloadData()
                 }
                 print("234456677888888", self.bookIdList)
                 self.tableView.reloadData()
@@ -83,6 +84,7 @@ class accountBookList: UITableViewController, ToDoItemDelegate3 {
                         !self.bookIdList.contains("\(item["id"]!)"){
                         self.bookIdList.add("\(item["id"]!)")
                     }
+                    self.tableView.reloadData()
                 }
                 print("8888888888888888", self.bookIdList)
                 self.tableView.reloadData()
@@ -98,6 +100,8 @@ class accountBookList: UITableViewController, ToDoItemDelegate3 {
             tableView.addSubview(refresh)
         }
         
+        self.refreshControl?.beginRefreshing()
+        self.refreshData(self.refreshControl)
         
         getBookList()
         if (theMessage != ""){
@@ -107,8 +111,8 @@ class accountBookList: UITableViewController, ToDoItemDelegate3 {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        tableView.reloadData()
-        tableView.reloadData()
+        super.viewDidLoad()
+        getBookList()
         tableView.reloadData()
     }
     
@@ -116,6 +120,7 @@ class accountBookList: UITableViewController, ToDoItemDelegate3 {
     func refreshData(_ sender: UIRefreshControl!){
         
         tableView.reloadData()
+        refresh.endRefreshing()
     }
     
     func getBookList() {
@@ -127,6 +132,7 @@ class accountBookList: UITableViewController, ToDoItemDelegate3 {
             if let err = error {
                 print("ERROR ", err)
             } else if let items = result?.items {
+                print("979797979797", self.bookIdList)
                 for item in items {
                     if self.bookIdList.contains("\(item["id"]!)"){
                         self.dicClient["bookName"] = "\(item["bookName"]!)"
@@ -288,6 +294,7 @@ class accountBookList: UITableViewController, ToDoItemDelegate3 {
     
     func didSaveItem(_ newBookName: String)
     {
+        print("98888888888: ", newBookName)
         
         if newBookName.isEmpty {
             return
@@ -297,6 +304,8 @@ class accountBookList: UITableViewController, ToDoItemDelegate3 {
         // We set created at to now, so it will sort as we expect it to post the push/pull
         let itemToInsert = ["id": String(maxmumBookId+1), "bookName": newBookName, "owner": self.loginName, "__createdAt": Date()] as [String : Any]
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        
+        print("98888888888: ", itemToInsert)
         
         self.itemTable.insert(itemToInsert) {
             
@@ -323,10 +332,10 @@ class accountBookList: UITableViewController, ToDoItemDelegate3 {
         
         viewDidLoad()
         
-        //self.tableView.reloadData()
+        self.tableView.reloadData()
         
         
-        //viewDidLoad()
+        viewDidLoad()
     }
     
 }

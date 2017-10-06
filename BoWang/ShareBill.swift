@@ -36,7 +36,7 @@ class ShareBill: UIViewController,  UIBarPositioningDelegate, UITextFieldDelegat
             bookId = UserDefaults.standard.string(forKey: loginName!)!
         }
         
-        hello.text = "  Hello:  \(loginName!) !  welcome to the app"
+        //hello.text = "  Hello:  \(loginName!) !  welcome to the app"
         refresh = UIRefreshControl()
       
         

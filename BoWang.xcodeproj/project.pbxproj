@@ -32,6 +32,7 @@
 		E9961BEB1F73C3CB008F29A9 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9961BEA1F73C3CB008F29A9 /* LoginViewController.swift */; };
 		E9961BED1F73C569008F29A9 /* signupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9961BEC1F73C569008F29A9 /* signupViewController.swift */; };
 		FE3B08231F80C87B00B1708E /* ShareBill.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE3B08221F80C87B00B1708E /* ShareBill.swift */; };
+		FEB0F93C1F876CF2009CE408 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FEB0F93B1F876CF2009CE408 /* Launch Screen.storyboard */; };
 		FEDD76561F826C00007B0172 /* rock.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FEDD76551F826C00007B0172 /* rock.mp3 */; };
 /* End PBXBuildFile section */
 
@@ -66,6 +67,7 @@
 		ED847818F8CF6B9CA1CBE996 /* Pods-BoWang.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BoWang.release.xcconfig"; path = "Pods/Target Support Files/Pods-BoWang/Pods-BoWang.release.xcconfig"; sourceTree = "<group>"; };
 		F9B69317BAAF010196DC83B2 /* Pods_BoWang.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BoWang.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE3B08221F80C87B00B1708E /* ShareBill.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareBill.swift; sourceTree = "<group>"; };
+		FEB0F93B1F876CF2009CE408 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		FEDD76551F826C00007B0172 /* rock.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = rock.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -143,6 +145,7 @@
 				E92CFDEF1F7FE53400336714 /* Photo.swift */,
 				FEDD76551F826C00007B0172 /* rock.mp3 */,
 				FE3B08221F80C87B00B1708E /* ShareBill.swift */,
+				FEB0F93B1F876CF2009CE408 /* Launch Screen.storyboard */,
 			);
 			path = BoWang;
 			sourceTree = "<group>";
@@ -240,6 +243,7 @@
 				A2D9CBCC1943C2540017F096 /* Main.storyboard in Resources */,
 				FEDD76561F826C00007B0172 /* rock.mp3 in Resources */,
 				2DC458151F7F42D800B1AE52 /* GoogleService-Info.plist in Resources */,
+				FEB0F93C1F876CF2009CE408 /* Launch Screen.storyboard in Resources */,
 				A2D9CBCE1943C2540017F096 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

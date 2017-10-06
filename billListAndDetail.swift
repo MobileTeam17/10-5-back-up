@@ -140,7 +140,7 @@ class billListAndDetail: UITableViewController, ToDoItemDelegate  {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         let client = self.list[indexPath.row] as! [String:String]
-        cell.textLabel?.text =  "the cost is:  $ \(client["theCost"]!)  "
+        cell.textLabel?.text =  "$ \(client["theCost"]!)  "
         
         let str = " \(client["label"]!)"
         var str2 = "   "+client["createdAt"]!

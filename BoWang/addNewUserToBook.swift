@@ -39,10 +39,7 @@ class addNewUserToBook: UIViewController,  UIBarPositioningDelegate, UITextField
     var list4 = NSMutableArray()
     
     @IBOutlet weak var userName: UITextField!
-    
-    
-    
-    @IBOutlet weak var Email: UITextField!
+
     
     var bookId = UserDefaults.standard.string(forKey: "selectedBookId")!
 
@@ -123,15 +120,15 @@ class addNewUserToBook: UIViewController,  UIBarPositioningDelegate, UITextField
     }
     
     @IBAction func cancelPressed(_ sender: UIBarButtonItem) {
-        self.Email.resignFirstResponder()
+        self.userName.resignFirstResponder()
         self.navigationController?.popViewController(animated: true)
     }
     
     @IBAction func addPressed(_ sender: UIButton) {
         let userName = self.userName.text
-        let Email = self.Email.text
+
         
-        if (userName?.isEmpty)! && (Email?.isEmpty)! {
+        if (userName?.isEmpty)!  {
             
             //display an alert message
             
@@ -139,15 +136,8 @@ class addNewUserToBook: UIViewController,  UIBarPositioningDelegate, UITextField
             return
         }
         
-        if !(userName?.isEmpty)! && !(Email?.isEmpty)! {
-            
-            //display an alert message
-            
-            displayMyAlertMessage(userMessage: "add one user at one time")
-            return
-        }
         
-        if !list.contains(userName) && !list.contains(Email){
+        if !list.contains(userName) {
             self.displayMyAlertMessage(userMessage: "the user name does not exist")
             return
             
@@ -157,12 +147,8 @@ class addNewUserToBook: UIViewController,  UIBarPositioningDelegate, UITextField
         
         var strr = ""
 
-        if (userName == ""){
-            strr = Email!
-        }
-        if (Email == ""){
-            strr = userName!
-        }
+        strr = userName!
+
 
         var str = "a"+strr
         
@@ -178,10 +164,7 @@ class addNewUserToBook: UIViewController,  UIBarPositioningDelegate, UITextField
             
             aa = UserDefaults.standard.array(forKey: str) as! NSMutableArray
         }
-        if (Email == "" &&
-            UserDefaults.standard.array(forKey: str) != nil){
-            aa = UserDefaults.standard.array(forKey: str) as! NSMutableArray
-        }
+
 
         let bookId = UserDefaults.standard.string(forKey: UserDefaults.standard.string(forKey: "userRegistEmail")!)!
 
@@ -263,18 +246,11 @@ class addNewUserToBook: UIViewController,  UIBarPositioningDelegate, UITextField
     func saveItem()
     {
         var userName = self.userName.text
-        let Email = self.Email.text
-        
-        print("the username is : ", userName)
-        print("the email id is : ", Email)
-        
+
         var userID = ""
-        if (userName == ""){
-            userID = Email!
-        }
-        else{
-            userID = userName!
-        }
+
+        userID = userName!
+    
         
         self.delegate?.didSaveItem(userID,bookId)
         

@@ -18,8 +18,9 @@ class signupViewController: UIViewController {
     @IBOutlet weak var repeatPasswordText: UITextField!
     
     @IBOutlet weak var emergeUser: UITextField!
-    
+//    
     @IBOutlet weak var telephone: UITextField!
+    
     
     
     var itemTable = (UIApplication.shared.delegate as! AppDelegate).client.table(withName: "login")

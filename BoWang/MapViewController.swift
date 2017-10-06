@@ -26,7 +26,7 @@ class MapViewController : UIViewController{
     
     let locationManager = CLLocationManager()
     var loginName = UserDefaults.standard.string(forKey: "userRegistEmail")
-    var theconnector = UserDefaults.standard.string(forKey: "theconnector")!
+    var theconnector = ""
     var telephone = ""
     
     @IBOutlet weak var locationInfo: UILabel!
@@ -63,7 +63,7 @@ class MapViewController : UIViewController{
             } else if let items = result?.items {
                 for item in items {
                     print("bbbbbbbbb", "\(item["email"]!)")
-                    if "\(item["email"]!)" == self.theconnector{
+                    if "\(item["email"]!)" == self.loginName{
                         self.telephone = "\(item["telephone"]!)"
                         print("the fffffff is", self.theconnector)
                         print("the phone is", self.telephone)
@@ -279,6 +279,7 @@ extension MapViewController: AVAudioPlayerDelegate {
                 controller.body = "\(str)  Now, I am in:  \(self.addressString) "
                 //connection list
                 controller.recipients = [self.telephone]
+                print("gggggggggggggggggg",self.telephone)
                 //set up the agent
                 controller.messageComposeDelegate = self
                 self.present(controller, animated: true, completion: nil)
