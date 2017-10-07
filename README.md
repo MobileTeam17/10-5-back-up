@@ -5,7 +5,7 @@ README
 
 ## Development
 
-# Need to install CocoaPods
+### Need to install CocoaPods
 ```
 $ sudo gem update --system
 ```
