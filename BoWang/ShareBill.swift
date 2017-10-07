@@ -188,8 +188,13 @@ class ShareBill: UIViewController,  UIBarPositioningDelegate, UITextFieldDelegat
                             }
                         }
                     }
+                    if printvar.count == 0{
+                        self.ShareBill.text = "You do not need to share bill with others."
+                    }
+                    else{
                     for index in 1...printvar.count{
                         self.ShareBill.text?.append(printvar[index-1])
+                    }
                     }
                 }
             }

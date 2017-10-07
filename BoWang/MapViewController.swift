@@ -27,7 +27,7 @@ class MapViewController : UIViewController{
     var loginName = UserDefaults.standard.string(forKey: "userRegistEmail")
     var theconnector = ""
     var telephone = ""
-    
+
     //map and location
     @IBOutlet weak var locationInfo: UILabel!
     @IBOutlet weak var map: MKMapView!
@@ -37,11 +37,13 @@ class MapViewController : UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("the connector isswwwwwww", UserDefaults.standard.string(forKey: "theconnector"))
         if (UserDefaults.standard.string(forKey: "theconnector") != nil){
-            var theconnector = UserDefaults.standard.string(forKey: "theconnector")
+            theconnector = UserDefaults.standard.string(forKey: "theconnector")!
             print("the connector is", self.theconnector)
             
         }
+        
         
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -64,6 +66,11 @@ class MapViewController : UIViewController{
                     }
                 }
             }
+        }
+        if (UserDefaults.standard.string(forKey: "theconnector") != nil){
+            var theconnector = UserDefaults.standard.string(forKey: "theconnector")!
+            print("the connector is", self.theconnector)
+            
         }
     }
 }
@@ -148,14 +155,14 @@ extension MapViewController: UINavigationControllerDelegate, MFMessageComposeVie
         let ref = Database.database().reference().child("message")
         var values = [String:Any]()
         if (addressString != "") {
-            values = ["text": addressString,"fromId":fromId,"toId":theconnector]
+            values = ["text": addressString,"fromId":fromId,"toId":self.theconnector]
             ref.updateChildValues(values)
         }
         
         //set up the connector
         let str = self.theconnector
         //create a window to inform the user
-        let alertController = UIAlertController(title: "send message", message: "Do you want to send message to \(str) ?", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "send message", message: "Do you want to send message to \(theconnector) ?", preferredStyle: .alert)
         let cancleAction = UIAlertAction(title: "cancel", style: .cancel, handler: nil)
         let sendAction = UIAlertAction(title: "yes", style: .default) { (alertController) in
             //to judge whether the device can send message
@@ -244,7 +251,7 @@ extension MapViewController: AVAudioPlayerDelegate {
         self.player?.play()
         
         //create a window to inform the user
-        let alertController = UIAlertController(title: "send message", message: "Do you want to send message to \(str) ?", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "send message", message: "Do you want to send message to \(theconnector) ?", preferredStyle: .alert)
         let cancleAction = UIAlertAction(title: "cancel", style: .cancel, handler: nil)
         let sendAction = UIAlertAction(title: "yes", style: .default) { (alertController) in
             

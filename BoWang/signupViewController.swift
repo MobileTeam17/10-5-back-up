@@ -30,8 +30,10 @@ class signupViewController: UIViewController, UITextFieldDelegate {
     //This function is to signup, when we click the button, all data will be saved and sent to Azure
     @IBAction func signupButton(_ sender: Any)
     {
+        //important line: cast anyobject to NSMutableArray
+        var mutableArray : NSMutableArray = NSMutableArray(array: array2)
         if (array2 != nil){
-            list2 = array2 as! NSMutableArray
+            list2 = mutableArray as! NSMutableArray
         }
    
         let userEmail = emailText.text
