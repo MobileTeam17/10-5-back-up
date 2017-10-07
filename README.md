@@ -7,25 +7,25 @@ README
 
 #Need to install CocoaPods
 ```
-sudo gem update --system
+$ sudo gem update --system
 ```
 
 ```
-sudo gem install -n /usr/local/bin cocoapods
+$ sudo gem install -n /usr/local/bin cocoapods
 ```
 
 ```
-pod setup
+$ pod setup
 
-pod --version
+$ pod --version
 
-sudo gem update cocoapods
+$ sudo gem update cocoapods
 ```
 
 ```
-cd /filepath/filepath/.../10-5-back-up
+$ cd /filepath/filepath/.../10-5-back-up
 
-pod install
+$ pod install
 ```
 
 ## Swift
