@@ -1,10 +1,6 @@
-//
-//  ViewController.swift
-//  crema
-//
-//  Created by zhe on 2017/9/30.
-//  Copyright © 2017年 MelbUni. All rights reserved.
-//
+/*
+ The final app doesn't have this class, however, it's to take a photo or hoose from the photolibrary and save it to Azure as String
+ */
 
 import UIKit
 import AssetsLibrary
@@ -12,15 +8,10 @@ import AssetsLibrary
 
 
 
-class Photo: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class Photo: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var imageView: UIImageView!
-    
-    
-    
     @IBOutlet weak var addPhotoButton: UIButton!
-    
-    
     @IBAction func addPhoto(_ sender: UIButton) {
         
         showActionSheet()
@@ -28,7 +19,6 @@ class Photo: UIViewController, UIImagePickerControllerDelegate, UINavigationCont
     
     
     func showActionSheet() {
-        
         let actionSheet = UIAlertController(title: "PHOTO SOURCE", message: nil, preferredStyle: .actionSheet)
         
         //photo source - camera
@@ -43,11 +33,8 @@ class Photo: UIViewController, UIImagePickerControllerDelegate, UINavigationCont
         
         //cancel button
         actionSheet.addAction(UIAlertAction(title: "CANCEL", style: .cancel, handler:nil))
-        
         present(actionSheet, animated: true, completion: nil)
-        
     }
-    
     
     func showImagePickerForSourceType(_ sourceType: UIImagePickerControllerSourceType) {
         
@@ -56,11 +43,6 @@ class Photo: UIViewController, UIImagePickerControllerDelegate, UINavigationCont
             imagePickerController.allowsEditing = true
             imagePickerController.modalPresentationStyle = .currentContext
             imagePickerController.sourceType = sourceType
-            ////////////////////////////////////////
-            /*
-             We actually have two delegates:UIImagePickerControllerDelegate and UINavigationControllerDelegate. The UINavigationControllerDelegate is required but we do nothing with it.
-             Add the following:
-             */
             imagePickerController.delegate = self
             
             self.present(imagePickerController, animated: true, completion: nil)
@@ -71,8 +53,6 @@ class Photo: UIViewController, UIImagePickerControllerDelegate, UINavigationCont
     
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        
-        //https://developer.apple.com/library/ios/documentation/UIKit/Reference///UIImagePickerControllerDelegate_Protocol/index.html#//apple_ref/doc/constant_group/Editing_Information_Keys
         
         picker.dismiss(animated: true) {
             
@@ -91,22 +71,12 @@ class Photo: UIViewController, UIImagePickerControllerDelegate, UINavigationCont
         
         let imageData = UIImageJPEGRepresentation(imageView.image!, 0.6)
         let compreseedJPEGImage = UIImage(data: imageData!)
-        
-        
-        
         let assets : ALAssetsLibrary = ALAssetsLibrary()
         let imgRef : CGImage = compreseedJPEGImage!.cgImage!
         let orientation : ALAssetOrientation = ALAssetOrientation(rawValue: compreseedJPEGImage!.imageOrientation.rawValue)!
-        
         assets.writeImage(toSavedPhotosAlbum: imgRef, orientation: orientation, completionBlock:
             { _,_ in (path:NSURL!, error:NSError!).self
         })
-        //print(orientation.path)
-        
-        //assets.writeImage(toSavedPhotosAlbum: imgRef, orientation: orientation, completionBlock: nil)
-        
-        
-        //UIImageWriteToSavedPhotosAlbum(compreseedJPEGImage!, nil, nil, nil)
         saveNotice()
     }
     
@@ -120,9 +90,19 @@ class Photo: UIViewController, UIImagePickerControllerDelegate, UINavigationCont
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
     }
     
+    
+    //hide keyboard when user touches outside keybar
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    //presses return key to dismiss keyboard
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return(true)
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

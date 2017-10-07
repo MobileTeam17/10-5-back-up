@@ -1,14 +1,12 @@
-//
-//  billListAndDetail.swift
-//  BoWang
-//
-//  Created by 王博 on 22/9/17.
-//  Copyright © 2017 Microsoft. All rights reserved.
-//
+/*
+ This class can let user to add a new bill
+ 1. The bill have several properties(usage, cost, location, etc.)
+ 2. We gater the bill data and store to Azure table 'billLIstAndDatials'
+ 3. we present these properties in a cell
+ 4. When the user login, it will first read all the data and present in the cell
+ */
 
 import Foundation
-
-
 import UIKit
 
 class billListAndDetail: UITableViewController, ToDoItemDelegate  {
@@ -26,10 +24,9 @@ class billListAndDetail: UITableViewController, ToDoItemDelegate  {
     
     @IBOutlet weak var hello: UILabel!
     
-    
-    
     override func viewDidLoad() {
         
+        //get the loginName and emergency contact
         if UserDefaults.standard.string(forKey: loginName!) != nil{
             bookId = UserDefaults.standard.string(forKey: loginName!)!
         }
@@ -45,6 +42,7 @@ class billListAndDetail: UITableViewController, ToDoItemDelegate  {
             }
         }
         
+        //a welcome view and refresh the page
         hello.text = "  Hello:  \(loginName!) !  welcome to the app"
         refresh = UIRefreshControl()
         super.viewDidLoad()
@@ -58,7 +56,7 @@ class billListAndDetail: UITableViewController, ToDoItemDelegate  {
         refresh.attributedTitle = NSAttributedString(string: "reload the bill information")
         refresh.addTarget(self, action: #selector(billListAndDetail.refreshData(_:)), for: UIControlEvents.valueChanged)
         
-        
+        //read 'id', 'label', 'creatTime', 'theCost', 'updateTime' and 'spendBy' from the table 'billListAndDetails'
         let delegate = UIApplication.shared.delegate as! AppDelegate
         let client2 = delegate.client
         itemTable = client2.table(withName: "billListAndDetails")
@@ -95,18 +93,13 @@ class billListAndDetail: UITableViewController, ToDoItemDelegate  {
         } else {
             tableView.addSubview(refresh)
         }
-        
         self.refreshControl?.beginRefreshing()
-        
         self.refreshData(self.refreshControl)
-        
-        print("the transfer bookid is : ", self.bookId)
         
     }
     
-    
+    //refresh data
     func refreshData(_ sender: UIRefreshControl!){
-        
         tableView.reloadData()
         refresh.endRefreshing()
     }
@@ -115,37 +108,33 @@ class billListAndDetail: UITableViewController, ToDoItemDelegate  {
     
     @IBAction func backPage(_ sender: UIBarButtonItem) {
         self.dismiss(animated: true, completion: nil)
-        //self.navigationController?.popViewController(animated: true)
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     // MARK: - Table view data source
-    
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
     
+    //get the size
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        print("the size is : ", list.count)
         return list.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
+        //create a cell to present the datials
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         let client = self.list[indexPath.row] as! [String:String]
         cell.textLabel?.text =  "$ \(client["theCost"]!)  "
-        
         let str = " \(client["label"]!)"
         var str2 = "   "+client["createdAt"]!
         var str3 = " by "+client["spendBy"]!
-        
         
         for i in 0 ..< 14 {
             str2.remove(at: str2.index(before: str2.endIndex))
@@ -156,16 +145,17 @@ class billListAndDetail: UITableViewController, ToDoItemDelegate  {
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        
+        //delete the bill
         if editingStyle == UITableViewCellEditingStyle.delete
         {
             while self.list.contains(self.list.index(of: indexPath.row))   {
                 self.list.remove(at: indexPath.row)
             }
+            
             var item = [String:Any]()
             item = self.list.object(at: indexPath.row) as! [String : Any]
-            
             let sss = item["id"]
-            
             self.itemTable.delete(withId: sss) { (id, error) in
                 if let err = error {
                     print("ERROR ", err)
@@ -191,14 +181,14 @@ class billListAndDetail: UITableViewController, ToDoItemDelegate  {
     }
     
     // MARK: Navigation
-    
+    //add a new bill
     @IBAction func addItem(_ sender: Any) {
         self.performSegue(withIdentifier: "addItem", sender: self)
         
     }
     
     
-    
+    //prepare when link to another page
     override func prepare(for segue: UIStoryboardSegue, sender: Any!)
     {
         if segue.identifier == "addItem" {
@@ -207,7 +197,6 @@ class billListAndDetail: UITableViewController, ToDoItemDelegate  {
         }
         
         if(segue.identifier == "userPage") {
-            
             let todoController = segue.destination as! userListPage
             if self.bookId == ""{
                 displayMyAlertMessage(userMessage: "select a account book first!")
@@ -216,34 +205,29 @@ class billListAndDetail: UITableViewController, ToDoItemDelegate  {
             else{
                 todoController.bookId = self.bookId
             }
-            
         }
     }
     
+    //This alert will show immediatly when user login in this app
+    //Content is: someone else sent to ask for help SMS
     func displayMyAlertMessage2(userMessage: String)  {
         let myAlert = UIAlertController(title:"  Send from:  \(sendId)  ", message: userMessage, preferredStyle: UIAlertControllerStyle.alert)
-        
         let okAction = UIAlertAction(title: "ok", style: UIAlertActionStyle.default, handler: nil)
-        
         myAlert.addAction(okAction)
-        
         UserDefaults.standard.set("", forKey: "theMessages")
         self.present(myAlert, animated: true, completion: nil)
     }
     
+    //display alert
     func displayMyAlertMessage(userMessage: String)  {
         let myAlert = UIAlertController(title:"Alert", message: userMessage, preferredStyle: UIAlertControllerStyle.alert)
-        
         let okAction = UIAlertAction(title: "ok", style: UIAlertActionStyle.default, handler: nil)
-        
         myAlert.addAction(okAction)
-        
         self.present(myAlert, animated: true, completion: nil)
     }
     
     // MARK: - ToDoItemDelegate
-    
-    
+    //save data
     func didSaveItem(_ label: String, _ theCost: String, _ describetion: String)
     {
         if label.isEmpty {
@@ -255,8 +239,6 @@ class billListAndDetail: UITableViewController, ToDoItemDelegate  {
         if describetion.isEmpty {
             return
         }
-        
-        
         
         // We set created at to now, so it will sort as we expect it to post the push/pull
         let itemToInsert = ["label": label, "theCost": theCost, "owner": owner,"describ":describetion, "__createdAt": Date(), "spendBy": loginName, "accountBookId": bookId] as [String : Any]
@@ -271,7 +253,7 @@ class billListAndDetail: UITableViewController, ToDoItemDelegate  {
         }
         
         
-        
+        //save to the loacl 'dic' and then save to a list
         self.dicClient["label"] = "\(itemToInsert["label"]!)"
         self.dicClient["theCost"] = "\(itemToInsert["theCost"]!)"
         self.dicClient["createdAt"] = "\(itemToInsert["__createdAt"]!)"
@@ -280,13 +262,8 @@ class billListAndDetail: UITableViewController, ToDoItemDelegate  {
         
         self.list.add(self.dicClient)
         
-        
         viewDidLoad()
         viewDidLoad()
         self.tableView.reloadData()
-        
-        
-        
     }
-    
 }

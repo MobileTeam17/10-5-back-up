@@ -14,7 +14,6 @@
 		2D60FC4F1F7E2F600091E85D /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D60FC4E1F7E2F600091E85D /* CoreLocation.framework */; };
 		2D60FC511F7E30850091E85D /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D60FC501F7E30850091E85D /* MapViewController.swift */; };
 		2D60FC531F7E3E390091E85D /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D60FC521F7E3E390091E85D /* MapKit.framework */; };
-		2D7A95811F7F8F2800D50CD4 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D7A95801F7F8F2800D50CD4 /* Message.swift */; };
 		2D8A540F1F75363B002BDDC2 /* billListAndDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D8A540E1F75363B002BDDC2 /* billListAndDetail.swift */; };
 		2D8A54111F7545F5002BDDC2 /* accountBookList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D8A54101F7545F5002BDDC2 /* accountBookList.swift */; };
 		2D8A54131F755DE1002BDDC2 /* addNewBill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D8A54121F755DE1002BDDC2 /* addNewBill.swift */; };
@@ -44,7 +43,6 @@
 		2D60FC4E1F7E2F600091E85D /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		2D60FC501F7E30850091E85D /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		2D60FC521F7E3E390091E85D /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		2D7A95801F7F8F2800D50CD4 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		2D8A540E1F75363B002BDDC2 /* billListAndDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = billListAndDetail.swift; path = ../billListAndDetail.swift; sourceTree = "<group>"; };
 		2D8A54101F7545F5002BDDC2 /* accountBookList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = accountBookList.swift; sourceTree = "<group>"; };
 		2D8A54121F755DE1002BDDC2 /* addNewBill.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = addNewBill.swift; sourceTree = "<group>"; };
@@ -141,7 +139,6 @@
 				2D162A611F77A34F003BC2E1 /* shareBookId.swift */,
 				2D1694131F78B2BC00825E49 /* addNewBook.swift */,
 				2D60FC501F7E30850091E85D /* MapViewController.swift */,
-				2D7A95801F7F8F2800D50CD4 /* Message.swift */,
 				E92CFDEF1F7FE53400336714 /* Photo.swift */,
 				FEDD76551F826C00007B0172 /* rock.mp3 */,
 				FE3B08221F80C87B00B1708E /* ShareBill.swift */,
@@ -212,7 +209,7 @@
 				TargetAttributes = {
 					A2D9CBBD1943C2540017F096 = {
 						CreatedOnToolsVersion = 6.0;
-						DevelopmentTeam = 7L8XG5XLGG;
+						DevelopmentTeam = PHYEHS64HS;
 						LastSwiftMigration = 0820;
 					};
 				};
@@ -324,7 +321,6 @@
 				2D162A621F77A34F003BC2E1 /* shareBookId.swift in Sources */,
 				2D60FC511F7E30850091E85D /* MapViewController.swift in Sources */,
 				2D1694141F78B2BC00825E49 /* addNewBook.swift in Sources */,
-				2D7A95811F7F8F2800D50CD4 /* Message.swift in Sources */,
 				2D8A54131F755DE1002BDDC2 /* addNewBill.swift in Sources */,
 				2D1E65991F75FE1700AF1ABC /* userListPage.swift in Sources */,
 				A2D9CBC41943C2540017F096 /* AppDelegate.swift in Sources */,
@@ -441,7 +437,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 7L8XG5XLGG;
+				DEVELOPMENT_TEAM = PHYEHS64HS;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -449,7 +445,7 @@
 				INFOPLIST_FILE = BoWang/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = my.unimelb.test1111;
+				PRODUCT_BUNDLE_IDENTIFIER = my.unimelb.625126.BoWang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "BoWang/BoWang-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -463,7 +459,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = 7L8XG5XLGG;
+				DEVELOPMENT_TEAM = PHYEHS64HS;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -471,7 +467,7 @@
 				INFOPLIST_FILE = BoWang/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = my.unimelb.test1111;
+				PRODUCT_BUNDLE_IDENTIFIER = my.unimelb.625126.BoWang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "BoWang/BoWang-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;

@@ -1,23 +1,8 @@
-
-
-//  accountBookList.swift
-
-
-// ----------------------------------------------------------------------------
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// ----------------------------------------------------------------------------
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
+/*
+ This class presents all the users in the accountbook
+ 1. The number of the book is incremented from 0
+ 2. Every accountbook have an unique number
+ */
 import Foundation
 import UIKit
 import CoreData
@@ -48,31 +33,25 @@ class userListPage: UITableViewController, ToDoItemDelegate2 {
             bookId = UserDefaults.standard.string(forKey: "selectedBookId")!
         }
         
-        //hello.text = "  hello:  \(loginName!) !  welcome to the app"
         refresh = UIRefreshControl()
         super.viewDidLoad()
         
         // Do any additional setup after loading the view, typically from a nib.
         list = NSMutableArray()
         tableView.reloadData()
-        
-        tableView.dataSource=self
+        tableView.dataSource = self
         tableView.delegate = self
         refresh.addTarget(self,action:#selector(billListAndDetail.refreshData(_:)), for: UIControlEvents.valueChanged)
         
+        //save the accountbook id
         if UserDefaults.standard.string(forKey: "selectedBookId") != nil{
             UserDefaults.standard.set(bookId, forKey: "selectedBookId")
         }
         
-        
-        
-        
-        
         let queue = DispatchQueue(label: "com.appcoda.myqueue")
         queue.sync {
             
-            
-            print("the initial list value is : ", list)
+            //read 'bookid' and 'user' from the book_user table
             itemTable.read { (result, error) in
                 var ss = ""
                 if let err = error {
@@ -81,26 +60,20 @@ class userListPage: UITableViewController, ToDoItemDelegate2 {
                     print("the item list is : ", items.count)
                     for item in items {
                         self.dicClient["theUser"] = "\(item["theUser"]!)"
-                        
                         if "\(item["bookId"]!)" == self.bookId{
-                            
-                            
                             if !self.list.contains(self.dicClient){
-                                
                                 self.list.add(self.dicClient)
                                 ss = "\(item["bookId"]!)"
                                 print("the book is : ", ss)
                                 print("the size is : ", self.list)
                                 self.tableView.reloadData()
-                                print("1111111: ", self.list.count)
                             }
                         }
-                        
+                        //tip: here we present the same line for several time because we still get confuesed about the execution order of swift
                         self.tableView.reloadData()
                         self.tableView.reloadData()
                         self.refreshData(self.refresh)
                         self.refreshData(self.refresh)
-                        
                     }
                     
                 }
@@ -117,32 +90,20 @@ class userListPage: UITableViewController, ToDoItemDelegate2 {
             } else if let items = result?.items {
                 for item in items {
                     self.dicClient["theUser"] = "\(item["owner"]!)"
-                    
                     if "\(item["owner"]!)" == self.loginName{
-                        
-                        
                         if !self.list.contains(self.dicClient){
-                            
                             self.list.add(self.dicClient)
                             ss = "\(item["owner"]!)"
-                            
-                            
                             print("the book is : ", ss)
                             print("the size is : ", self.list)
                             self.tableView.reloadData()
-                            
-                            
-                            print("1111111: ", self.list.count)
                         }
                     }
-                    
                     self.tableView.reloadData()
                     self.tableView.reloadData()
                     self.refreshData(self.refresh)
                     self.refreshData(self.refresh)
-                    
                 }
-                
             }
         }
         
@@ -167,9 +128,7 @@ class userListPage: UITableViewController, ToDoItemDelegate2 {
     }
     
     func refreshData(_ sender: UIRefreshControl!){
-        
         tableView.reloadData()
-        //refresh.endRefreshing()
     }
     
     
@@ -180,9 +139,7 @@ class userListPage: UITableViewController, ToDoItemDelegate2 {
     
     func onRefresh(_ sender: UIRefreshControl!) {
         tableView.reloadData()
-        
         refresh.endRefreshing()
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -190,7 +147,6 @@ class userListPage: UITableViewController, ToDoItemDelegate2 {
     }
     
     // MARK: Table Controls
-    
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool
     {
         return true
@@ -215,45 +171,34 @@ class userListPage: UITableViewController, ToDoItemDelegate2 {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         print("the number is : ", list.count)
-        //self.tableView.reloadData()
         return list.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let CellIdentifier = "Cell"
-        
-        //var cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier, for: indexPath)
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        //cell = configureCell(cell, indexPath: indexPath)
-        
         let client = self.list[indexPath.row] as! [String:String]
-        
         cell.textLabel?.text =  client["theUser"] as! String
-        
         tableView.reloadRows(at: [indexPath], with: .automatic)
         
-        
         super.viewDidLoad()
-        //self.tableView.reloadData()
-        print("writing now : ", list.count)
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let client = self.list[indexPath.row] as! [String:String]
-        
         theValue = client["theUser"] as! String
         
     }
     
-    
+    //back to bill list
     @IBAction func back(_ sender: UIBarButtonItem) {
-        //self.dismiss(animated: true, completion: nil)
         UserDefaults.standard.set(bookId, forKey: "selectedBookId")
         
     }
     
+    //prepared to link to another page
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "addUser" {
             let todoController = segue.destination as! addNewUserToBook
@@ -263,18 +208,13 @@ class userListPage: UITableViewController, ToDoItemDelegate2 {
     }
     
     
-    
     @IBAction func home(_ sender: UIBarButtonItem) {
         self.dismiss(animated: true, completion: nil)
     }
     
-    
-    // MARK: - ToDoItemDelegate
-    
-    
+    //save data
     func didSaveItem(_ theUser: String, _ bookId: String)
     {
-        
         if theUser.isEmpty {
             return
         }
@@ -282,12 +222,9 @@ class userListPage: UITableViewController, ToDoItemDelegate2 {
             return
         }
         
-        
-        
         // We set created at to now, so it will sort as we expect it to post the push/pull
         let itemToInsert = ["theUser": theUser, "bookId": bookId, "__createdAt": Date()] as [String : Any]
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        
         
         self.itemTable.insert(itemToInsert) {
             
@@ -301,12 +238,8 @@ class userListPage: UITableViewController, ToDoItemDelegate2 {
         self.dicClient["theUser"] = "\(itemToInsert["theUser"]!)"
         self.dicClient["bookId"] = "\(itemToInsert["bookId"]!)"
         self.dicClient["createdAt"] = "\(itemToInsert["__createdAt"]!)"
-        
-        
         self.list.add(self.dicClient)
-        print("whether insert or not : ", list.count)
-        print("the list is : ", self.list)
-        
+
         Thread.sleep(forTimeInterval: 2)
         
         viewDidLoad()

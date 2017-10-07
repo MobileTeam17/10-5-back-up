@@ -1,22 +1,9 @@
-
-//  accountBookList.swift
-
-
-// ----------------------------------------------------------------------------
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// ----------------------------------------------------------------------------
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
+/*
+ This class is to add a new account book and present all the account books
+ 1. The number of the book is incremented from 0
+ 2. Every accountbook have an unique number
+ 
+ */
 import Foundation
 import UIKit
 import CoreData
@@ -46,10 +33,10 @@ class accountBookList: UITableViewController, ToDoItemDelegate3 {
         
         super.viewDidLoad()
         
+        //refresh the page
         refresh = UIRefreshControl()
         
-        let queue2 = DispatchQueue(label: "com.appcoda.myqueue")
-        //queue2.sync {
+        //read data(users) form Azure
         let delegate2 = UIApplication.shared.delegate as! AppDelegate
         let client2 = delegate2.client
         itemTable2 = client2.table(withName: "book_users")
@@ -61,17 +48,15 @@ class accountBookList: UITableViewController, ToDoItemDelegate3 {
                     if "\(item["theUser"]!)" == self.loginName! &&
                         !self.bookIdList.contains("\(item["bookId"]!)"){
                         self.bookIdList.add("\(item["bookId"]!)")
-                        
                     }
                     self.tableView.reloadData()
                 }
-                print("234456677888888", self.bookIdList)
                 self.tableView.reloadData()
             }
         }
-        //}
         self.tableView.reloadData()
         
+        //read data(accountbook) from Azure, which will return a booklist
         let delegate = UIApplication.shared.delegate as! AppDelegate
         let client = delegate.client
         itemTable = client.table(withName: "AccountBook")
@@ -86,7 +71,6 @@ class accountBookList: UITableViewController, ToDoItemDelegate3 {
                     }
                     self.tableView.reloadData()
                 }
-                print("8888888888888888", self.bookIdList)
                 self.tableView.reloadData()
             }
         }
@@ -94,16 +78,17 @@ class accountBookList: UITableViewController, ToDoItemDelegate3 {
         
         getBookList()
         
+        //???
         if #available(iOS 10.0, *) {
             tableView.refreshControl = refresh
         } else {
             tableView.addSubview(refresh)
         }
-        
         self.refreshControl?.beginRefreshing()
         self.refreshData(self.refreshControl)
         
         getBookList()
+        
         if (theMessage != ""){
             displayMyAlertMessage(userMessage: theMessage)
         }
@@ -116,13 +101,13 @@ class accountBookList: UITableViewController, ToDoItemDelegate3 {
         tableView.reloadData()
     }
     
-    
+    //This function can reload the data
     func refreshData(_ sender: UIRefreshControl!){
-        
         tableView.reloadData()
         refresh.endRefreshing()
     }
     
+    //This function can the account book name
     func getBookList() {
         list = NSMutableArray()
         let delegate = UIApplication.shared.delegate as! AppDelegate
@@ -132,12 +117,10 @@ class accountBookList: UITableViewController, ToDoItemDelegate3 {
             if let err = error {
                 print("ERROR ", err)
             } else if let items = result?.items {
-                print("979797979797", self.bookIdList)
                 for item in items {
                     if self.bookIdList.contains("\(item["id"]!)"){
                         self.dicClient["bookName"] = "\(item["bookName"]!)"
                         self.dicClient["id"] = "\(item["id"]!)"
-                        //self.dicClient["createdAt"] = "\(item["__createdAt"]!)"
                         if !self.list.contains(self.dicClient){
                             self.list.add(self.dicClient)
                         }
@@ -149,32 +132,22 @@ class accountBookList: UITableViewController, ToDoItemDelegate3 {
         
     }
     
-    
+    //This function can display an alert
     func displayMyAlertMessage(userMessage: String)  {
         let myAlert = UIAlertController(title:"Alert", message: userMessage, preferredStyle: UIAlertControllerStyle.alert)
-        
         let okAction = UIAlertAction(title: "ok", style: UIAlertActionStyle.default, handler: nil)
-        
-        myAlert.addAction(okAction)
-        
         self.present(myAlert, animated: true, completion: nil)
     }
     
     
-    func showExample(_ segueId: String) {
-        performSegue(withIdentifier: segueId, sender: nil)
-    }
     
-    
+    //refresh the page
     func onRefresh(_ sender: UIRefreshControl!) {
         tableView.reloadData()
-        
         if (theMessage != ""){
             displayMyAlertMessage(userMessage: theMessage)
         }
-        
         refresh.endRefreshing()
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -182,7 +155,6 @@ class accountBookList: UITableViewController, ToDoItemDelegate3 {
     }
     
     // MARK: Table Controls
-    
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool
     {
         return true
@@ -203,73 +175,54 @@ class accountBookList: UITableViewController, ToDoItemDelegate3 {
         
     }
     
+    //return the list number
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        print("the size is : ", list.count)
-        
         return list.count
     }
     
+    //view
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let CellIdentifier = "Cell"
-        
-        //var cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier, for: indexPath)
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        //cell = configureCell(cell, indexPath: indexPath)
-        
         let client = self.list[indexPath.row] as! [String:String]
-        
         cell.textLabel?.text =  client["bookName"] as! String
-        
         tableView.reloadRows(at: [indexPath], with: .automatic)
-        
-        
         super.viewDidLoad()
-        
         return cell
     }
     
+    //present the table view
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let client = self.list[indexPath.row] as! [String:String]
-        
         theValue = client["bookName"] as! String
         selectedBookId = client["id"]!
-        
         UserDefaults.standard.set(selectedBookId, forKey: loginName!)
         performSegue(withIdentifier: "billListAndDetail", sender: nil)
-        
-        
     }
     
-    
+    //Get prepared when you want to link to another page
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
         if segue.identifier == "addBook" {
             let todoController = segue.destination as! addNewBook
             todoController.delegate = self
             getMaxBookId()
-            print("12121212112112 : ", maxmumBookId)
         }
-        
         if(segue.identifier == "getLocation") {
-            //UserDefaults.standard.set(selectedBookId, forKey: "selectedBookId")
             
         }
-        
-        
         if(segue.identifier == "billListAndDetail") {
-            UserDefaults.standard.set(selectedBookId, forKey: "selectedBookId")
-            
+            UserDefaults.standard.set(selectedBookId, forKey: "selectedBookId")  
         }
     }
-    
     
     
     @IBAction func home(_ sender: UIBarButtonItem) {
         self.dismiss(animated: true, completion: nil)
     }
     
+    //Give every book an special id
     func getMaxBookId(){
         let delegate = UIApplication.shared.delegate as! AppDelegate
         let client = delegate.client
@@ -289,25 +242,26 @@ class accountBookList: UITableViewController, ToDoItemDelegate3 {
         }
     }
     
-    // MARK: - ToDoItemDelegate
-    
-    
+    //save data to Azure
     func didSaveItem(_ newBookName: String)
     {
-        print("98888888888: ", newBookName)
-        
         if newBookName.isEmpty {
             return
         }
         
-        
         // We set created at to now, so it will sort as we expect it to post the push/pull
         let itemToInsert = ["id": String(maxmumBookId+1), "bookName": newBookName, "owner": self.loginName, "__createdAt": Date()] as [String : Any]
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        
-        print("98888888888: ", itemToInsert)
-        
         self.itemTable.insert(itemToInsert) {
+            (item, error) in
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            if error != nil {
+            }
+        }
+        
+        //insert data to booklist
+        let itemToInsert2 = ["theUser": self.loginName, "bookId": String(maxmumBookId+1), "__createdAt": Date()] as [String : Any]
+        self.itemTable2.insert(itemToInsert2) {
             
             (item, error) in
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -316,32 +270,20 @@ class accountBookList: UITableViewController, ToDoItemDelegate3 {
             }
         }
         
+        //Store data in local 'dic'
         self.dicClient["bookName"] = "\(itemToInsert["bookName"]!)"
         self.dicClient["owner"] = "\(itemToInsert["owner"]!)"
         self.dicClient["createdAt"] = "\(itemToInsert["__createdAt"]!)"
         self.dicClient["id"] = "\(itemToInsert["id"]!)"
-        print("the list is : ", self.dicClient["bookName"])
-        print("the list is : ", self.dicClient["owner"])
-        print("the list is : ", self.dicClient["createdAt"])
-        print("the list is : ", self.dicClient["id"])
-        
         self.list.add(self.dicClient)
-        print("the list is : ", self.list)
-        print("the max Book Id is : ", maxmumBookId)
         Thread.sleep(forTimeInterval: 2)
         
         viewDidLoad()
         
         self.tableView.reloadData()
         
-        
         viewDidLoad()
     }
     
 }
-
-
-
-
-
 

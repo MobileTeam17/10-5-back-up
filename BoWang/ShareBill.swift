@@ -1,10 +1,5 @@
-//
-//  Report.swift
-//  BoWang
-//
-//  Created by Peach on 2017/9/28.
-//  Copyright © 2017年 Microsoft. All rights reserved.
-//
+/*
+*/
 
 import Foundation
 import UIKit
@@ -75,11 +70,10 @@ class ShareBill: UIViewController,  UIBarPositioningDelegate, UITextFieldDelegat
                             ss = "\(item["bookId"]!)"
                             
                             bookuser.append(item["theUser"] as! String)
+                            
                             print("sharebill after \(bookuser)")
                             print("the book is : ", ss)
                             //print("the size is : ", self.list)
-                           
-                            
                             
                             print("1111111: ", self.list.count)
                         }
@@ -202,6 +196,7 @@ class ShareBill: UIViewController,  UIBarPositioningDelegate, UITextFieldDelegat
                     self.ShareBill.text = ""
                     for i in 1...count{
                         print("a")
+     //                   let text = 1234.5522335 let textf = String(format: "%.2f", text)
                         if should_give[i-1] > 0{
                             print("b")
                             for j in 1...count{
@@ -223,7 +218,7 @@ class ShareBill: UIViewController,  UIBarPositioningDelegate, UITextFieldDelegat
                                             }
                                             printvar.removeAll()
                                             print("owner user2 \(printvar)")
-                                            printvar.append("\(username[i-1] ) should give \(username[j-1]) \(should_give[i-1]) \n")
+                                            printvar.append("\(username[i-1] ) should give \(username[j-1]) $ \(Int(should_give[i-1])) \n")
                                             for index in 1...c{
                                                 printvar.append(box[index-1])
                                             }
@@ -232,7 +227,7 @@ class ShareBill: UIViewController,  UIBarPositioningDelegate, UITextFieldDelegat
 
                                         }
                                         else{
-                                            printvar.append ("\(username[i-1] ) should give \(username[j-1]) \(should_give[i-1]) \n")
+                                            printvar.append ("\(username[i-1] ) should give \(username[j-1]) $ \(Int(should_give[i-1])) \n")
                                         
                                             print("\(username[i-1] ) should give \(username[j-1]) \(should_give[i-1])" )
                                             
@@ -257,8 +252,8 @@ class ShareBill: UIViewController,  UIBarPositioningDelegate, UITextFieldDelegat
                                             }
                                             printvar.removeAll()
                                             print("owner user2 \(printvar)")
-                                            printvar.append("\(username[i-1] ) should give \(username[j-1]) \(-should_give[j-1])")
-                                            print("\(username[i-1] ) should give \(username[j-1]) \(-should_give[j-1])" )
+                                            printvar.append("\(username[i-1] ) should give \(username[j-1]) $ \(Int(-should_give[j-1])) \n")
+                                            print("\(username[i-1] ) should give \(username[j-1]) \(Int(-should_give[j-1]))" )
                                             
                                             for index in 1...c{
                                                 printvar.append(box[index-1])
@@ -268,7 +263,7 @@ class ShareBill: UIViewController,  UIBarPositioningDelegate, UITextFieldDelegat
                                             
                                         }
                                         else{
-                                            printvar.append("\(username[i-1] ) should give \(username[j-1]) \(-should_give[j-1])")
+                                            printvar.append("\(username[i-1] ) should give \(username[j-1]) $ \(Int(-should_give[j-1])) \n")
                                             print("\(username[i-1] ) should give \(username[j-1]) \(-should_give[j-1])" )
                                             
                                         }
