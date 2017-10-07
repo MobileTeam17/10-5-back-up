@@ -13,9 +13,11 @@ protocol ToDoItemDelegate2 {
 
 class addNewUserToBook: UIViewController,  UIBarPositioningDelegate, UITextFieldDelegate {
     
-    var dicClient = [String:Any]()
+    //var dicClient = [String:Any]()
+    var dicClient:[Any] = []
     var dicClient2 = [String:Any]()
     var dicClient3 = [String:Any]()
+    var dicClient4 = [String:Any]()
     var list = NSMutableArray()
     var list2 = NSMutableArray()
     var list3 = NSMutableArray()
@@ -117,11 +119,10 @@ class addNewUserToBook: UIViewController,  UIBarPositioningDelegate, UITextField
         var strr = ""
         strr = userName!
         var str = "a" + strr
-        var dicClient = UserDefaults.standard.array(forKey: str)
-        aa = dicClient as! NSMutableArray
-        
-        
-        
+        dicClient = UserDefaults.standard.array(forKey: str)!
+        var mutableArray : NSMutableArray = NSMutableArray(array: dicClient)
+        aa = mutableArray
+
         
         if (userName == "" &&
             UserDefaults.standard.array(forKey: str) != nil){

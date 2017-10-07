@@ -1,5 +1,7 @@
 /*
-*/
+ This class is shareBill page
+ 1. We get all the cost from the table 'billListAndDetail'
+ */
 
 import Foundation
 import UIKit
@@ -24,75 +26,51 @@ class ShareBill: UIViewController,  UIBarPositioningDelegate, UITextFieldDelegat
     @IBOutlet weak var ShareBill: UILabel!
     
     
-    
     override func viewDidLoad(){
-    
+        
         if UserDefaults.standard.string(forKey: loginName!) != nil{
             bookId = UserDefaults.standard.string(forKey: loginName!)!
         }
         
-        //hello.text = "  Hello:  \(loginName!) !  welcome to the app"
+        //refresh the page with setting below
         refresh = UIRefreshControl()
-      
-        
         list = NSMutableArray()
-  
         refresh.backgroundColor = UIColor.darkGray
         refresh.attributedTitle = NSAttributedString(string: "reload the bill information")
         refresh.addTarget(self, action: #selector(billListAndDetail.refreshData(_:)), for: UIControlEvents.valueChanged)
         
-        
         let delegate = UIApplication.shared.delegate as! AppDelegate
         let client2 = delegate.client
         var username : [String] = [String]()
-        //var loginName = UserDefaults.standard.string(forKey: "userRegistEmail")
         var bookuser : [String] = [String]()
         
-        
+        //read all the users in the same accountbook
         itemTable = client2.table(withName: "book_users")
         itemTable.read { (result, error) in
             var ss = ""
             if let err = error {
                 print("ERROR ", err)
             } else if let items = result?.items {
-                print("the item list is : ", items.count)
                 for item in items {
+                    
+                    //get 'user', 'bookid',
                     self.dicClient["id"] = "\(item["id"]!)"
                     self.dicClient["theUser"] = "\(item["theUser"]!)"
                     self.dicClient["bookId"] = "\(item["bookId"]!)"
-                    print("sharebill before \(bookuser)")
                     if "\(item["bookId"]!)" == self.bookId{
-                        
-                        
                         if !self.list.contains(self.dicClient){
-                            
                             self.list.add(self.dicClient)
                             ss = "\(item["bookId"]!)"
-                            
                             bookuser.append(item["theUser"] as! String)
-                            
-                            print("sharebill after \(bookuser)")
-                            print("the book is : ", ss)
-                            //print("the size is : ", self.list)
-                            
-                            print("1111111: ", self.list.count)
                         }
                     }
-                    
-                 
                     self.refreshData(self.refresh)
                     self.refreshData(self.refresh)
-                    
                 }
-                
             }
         }
-    
-
-        print("sharebill user: \(bookuser)")
         
-        
-        
+        //read all bills from the accountbook
         itemTable = client2.table(withName: "billListAndDetails")
         itemTable.read { (result, error) in
             if let err = error {
@@ -111,57 +89,45 @@ class ShareBill: UIViewController,  UIBarPositioningDelegate, UITextFieldDelegat
                                 self.dicClient["updatedAt"] = "\(item["updatedAt"]!)"
                                 self.dicClient["spendBy"] = "\(item["spendBy"]!)"
                                 
+                                //get the total cost
                                 self.sum += Double(item["theCost"] as! String)!
-                                //print(self.sum)
-                                print(self.dicClient["spendBy"])
                                 if !self.list.contains(self.dicClient){
                                     self.list.add(self.dicClient)
                                 }
-                                print(self.bookId)
+                                
+                                //store all users in a string
                                 if ("\(item["accountBookId"]!)" == self.bookId) && (item["spendBy"] != nil) && !(username.contains(item["spendBy"] as!  String )){
-                                        username.append(item["spendBy"] as! String)
-                                        print(username)
+                                    username.append(item["spendBy"] as! String)
                                 }
-                                
-                                
-                                
                             }
                         }
                     }
-                    
-                    
                 }
                 
                 
                 
                 self.SUM.text = String(self.sum)
-                print(username)
-                print(username.count)
                 let items = result?.items
                 var spend : [Double] = [Double]()
-               
                 var should_give : [Double] = [Double]()
                 var count = 0
                 
+                //to find someone who really need to share the bill, but not spend any money
+                //the one spend money is on username
+                //all user are store in bookuser
                 if bookuser.count > username.count{
-                    
                     for index in 1...bookuser.count{
                         if !username.contains(bookuser[index-1]){
                             username.append(bookuser[index-1])
                         }
                     }
-                    
-                    
                     count = bookuser.count
-                    print("> \(count)")
-                    print("> \(username)")
                 }
                 else {
-                    
                     count = username.count
-                    print("= \(count)")
                 }
                 
+                //Must have more than one peopel to share the bill
                 if count == 0{
                     self.ShareBill.text = "You do not need to share bill with others."
                 }
@@ -173,143 +139,69 @@ class ShareBill: UIViewController,  UIBarPositioningDelegate, UITextFieldDelegat
                     for index in 1...count{
                         spend.append(0)
                         for item in items!{
+                            
+                            //select the men with their cost
+                            //everyone's cost saved in 'spend[]'
                             if ("\(item["accountBookId"]!)" == self.bookId) && (item["spendBy"] as! String == username[index-1] ){
-                                print("begin  \(item["spendBy"])  \(item["theCost"])")
                                 var sum = spend[index-1]
                                 var new = sum + Double(item["theCost"] as! String!)!
                                 spend[index-1] = new
                             }
                         }
-                        
                     }
-                    print(spend)
                     
+                    //count the average
                     var average = self.sum/Double(count)
                     var costlist = NSMutableArray()
+
+                    //calculate the money that everyone should pay
                     for index in 1...count{
                         should_give.append(-(spend[index-1] - average))
                     }
                     
-                    print(should_give)
-                    
+                    //'printvar' save all the infor will display on the screen
+                    //The general idea of the algorithm is that：
+                    //1. Everyone should pay the money minus the average consumption of all
+                    //2. Execute a 'for' loop: The first person should pay(receive) how much money to the backs
+                    // when the money comes to 0, it goes to the next person's loop
                     var printvar :[String] = [String]()
                     self.ShareBill.text = ""
                     for i in 1...count{
-                        print("a")
-     //                   let text = 1234.5522335 let textf = String(format: "%.2f", text)
                         if should_give[i-1] > 0{
-                            print("b")
                             for j in 1...count{
-                                
                                 if should_give[j-1] < 0 && should_give[i-1] > 0 {
                                     print("c")
-                                    print(should_give[j-1])
-                                    print("logininname \(self.loginName)")
                                     if -(should_give[j-1]) >= should_give[i-1]{
                                         print("d")
                                         should_give[j-1] += should_give[i-1]
-                                        
-                                        if username[i-1] == self.loginName!{
-                                            print("owner user1 \(printvar)")
-                                            var box : [String] = [String]()
-                                            var c = printvar.count
-                                            for index in 1...c{
-                                                box.append(printvar[index-1])
-                                            }
-                                            printvar.removeAll()
-                                            print("owner user2 \(printvar)")
-                                            printvar.append("\(username[i-1] ) should give \(username[j-1]) $ \(Int(should_give[i-1])) \n")
-                                            for index in 1...c{
-                                                printvar.append(box[index-1])
-                                            }
-                                            print("owner user3 \(printvar)")
-                                            
-
-                                        }
-                                        else{
-                                            printvar.append ("\(username[i-1] ) should give \(username[j-1]) $ \(Int(should_give[i-1])) \n")
-                                        
-                                            print("\(username[i-1] ) should give \(username[j-1]) \(should_give[i-1])" )
-                                            
-                                        }
+                                        printvar.append ("\(username[i-1] ) should give \(username[j-1]) $ \(Int(should_give[i-1])) \n")
                                         should_give[i-1] = 0
-                                        print("afterchange \(printvar)")
                                     }
                                     else if -(should_give[j-1]) < should_give[i-1]{
                                         print("e")
-                                        
-                                        print(should_give[i-1])
-                                        print(should_give[j-1])
                                         should_give[i-1] = should_give[i-1] + should_give[j-1]
-                                        print(should_give[i-1])
-                                        
-                                        if username[i-1] == self.loginName!{
-                                            print("owner user1 \(printvar)")
-                                            var box : [String] = [String]()
-                                            var c = printvar.count
-                                            for index in 1...c{
-                                                box.append(printvar[index-1])
-                                            }
-                                            printvar.removeAll()
-                                            print("owner user2 \(printvar)")
-                                            printvar.append("\(username[i-1] ) should give \(username[j-1]) $ \(Int(-should_give[j-1])) \n")
-                                            print("\(username[i-1] ) should give \(username[j-1]) \(Int(-should_give[j-1]))" )
-                                            
-                                            for index in 1...c{
-                                                printvar.append(box[index-1])
-                                            }
-                                            print("owner user3 \(printvar)")
-                                            
-                                            
-                                        }
-                                        else{
-                                            printvar.append("\(username[i-1] ) should give \(username[j-1]) $ \(Int(-should_give[j-1])) \n")
-                                            print("\(username[i-1] ) should give \(username[j-1]) \(-should_give[j-1])" )
-                                            
-                                        }
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        print("afterchange \(printvar)")
+                                        printvar.append("\(username[i-1] ) should give \(username[j-1]) $ \(Int(-should_give[j-1])) \n")
                                         should_give[j-1] = 0
                                         
                                     }
                                 }
-                                
                             }
-                            
                         }
-              
                     }
                     for index in 1...printvar.count{
                         self.ShareBill.text?.append(printvar[index-1])
                     }
-       
-                
                 }
-                
-                
-                       
+            }
         }
-        
-        print("the transfer bookid is : ", self.bookId)
-        
-    }
     }
     
     func refreshData(_ sender: UIRefreshControl!){
         
         refresh.endRefreshing()
     }
-    
-    
-    
-    
 
-    
+    //save data
     func didSaveItem(_ label: String, _ theCost: String, _ describetion: String)
     {
         if label.isEmpty {
@@ -321,8 +213,7 @@ class ShareBill: UIViewController,  UIBarPositioningDelegate, UITextFieldDelegat
         if describetion.isEmpty {
             return
         }
-        
-        
+
         // We set created at to now, so it will sort as we expect it to post the push/pull
         let itemToInsert = ["label": label, "theCost": theCost, "owner": owner,"describ":describetion, "__createdAt": Date(), "spendBy": loginName, "accountBookId": bookId] as [String : Any]
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -334,9 +225,7 @@ class ShareBill: UIViewController,  UIBarPositioningDelegate, UITextFieldDelegat
                 print("Error: " + (error! as NSError).description)
             }
         }
-        
-        
-        
+
         self.dicClient["label"] = "\(itemToInsert["label"]!)"
         self.dicClient["theCost"] = "\(itemToInsert["theCost"]!)"
         self.dicClient["createdAt"] = "\(itemToInsert["__createdAt"]!)"
@@ -344,13 +233,7 @@ class ShareBill: UIViewController,  UIBarPositioningDelegate, UITextFieldDelegat
         self.dicClient["accountBookId"] = bookId
         
         self.list.add(self.dicClient)
-        
-        
     }
-    
-    
-    
-    
 }
 
 

@@ -23,7 +23,7 @@ class addNewBill: UIViewController,  UIBarPositioningDelegate, UITextFieldDelega
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        self.labels.delegate = self
+        //self.labels.delegate = self
     }
     
     //Cancel what you current type
