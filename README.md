@@ -1,11 +1,17 @@
 README
 ===========================
 
+## Aim
+#### Our aim is to help those people who:
+    Old People (50-70 years old), hard to operate complex telephone functions
+    With bad memories
+    Bad in math and lack skills in financial affairs
+    With physical health issues, like heart disease, high blood pressure, or stroke.
 
 
 ## Development
 
-### Need to install CocoaPods
+#### Need to install CocoaPods
 ```
 $ sudo gem update --system
 ```
