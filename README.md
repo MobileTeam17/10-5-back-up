@@ -41,3 +41,5 @@ DailyHelper was written in Swift 3.0, Xcode 8.  
 ## Author
 
 [@Zhe](https://github.com/Mrxujimmy)
+[@Ying](https://github.com/cocobear411)
+[@Bo](https://github.com/bow4)
